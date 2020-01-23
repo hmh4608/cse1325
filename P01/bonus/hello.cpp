@@ -1,20 +1,18 @@
 #include <string>
 #include <iostream>
-using namespace std;
 
 int main()
 {
 	//declare string var
-	string name;
+	std::string name;
 	
 	//ask user for input	
-	cout << "Please enter your name (including spaces): ";
-	/*cin reads whitespace-separated word
-	getline consumes \n */
+	std::cout << "Please enter your name (including spaces): ";
+	//cin reads whitespace-separated word
 		
-	getline(cin, name);
+	std::cin >> name;
 	
-	cout << "Hello, " << name << endl;
+	std::cout << "Hello, " << name << std::endl;
 
 	return 0;
 }
