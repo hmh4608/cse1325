@@ -4,13 +4,15 @@ int main()
 {
 	//extreme bonus
 
-	/*from cppreference
+	/*
 	*currently not checking if the environment variable is found
-	*getenv() returns the matched environment list variable and null if not found*/
-	const char* userName = std::getenv("USERNAME");
+	*getenv() returns the environment variable that matches the category/parameter passed with the environment list and null if not found
+	*environment variable - dynamic "object"; helps programs where to find user settings and directories, etc
+	*/
+	const char* name = std::getenv("USERNAME");
 
 	//outputs
-	std::cout << "Hello, " << userName << std::endl;
+	std::cout << "Hello, " << name << std::endl;
 	
 	return 0;
 }
