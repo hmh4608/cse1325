@@ -10,7 +10,7 @@ int main()
 	Color lime{211, 255, 167};
 
 	//prints the three colors in their representative color
-	std::cout << red.colorize("Red") + " " + pink.colorize("Blush Pink") + " " + lime.colorize("Lime Green") << std::endl;
+	std::cout << red.colorize("Red") + " " + pink.colorize("Blush Pink") + " " + lime.colorize("Lime Green") << '\n' << std::endl;
 
 	//asks user for 3 integers representing red, green, and blue
 	int r, g, b;
