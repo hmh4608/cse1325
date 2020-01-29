@@ -25,6 +25,8 @@ std::string Color::colorize(std::string text)
 /*
 *method returns the "subjective brightness" or magnitude (0-255) of the color
 *calculated by returning 21% of red, 72% of green, and 7% of blue
+*
+*const promises the compiler that the const Color will not be modified
 */
 int Color::magnitude() const
 {
