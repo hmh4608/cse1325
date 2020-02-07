@@ -35,12 +35,14 @@ int Color::compare(const Color& rhs)
 	int rhsMag = rhs.magnitude();
 	int thisMag = magnitude();
 
-	if(thisMag > rhsMag)
-		return 1;
-	else if(thisMag < rhsMag)
-		return -1;
-	else
+	if(thisMag == rhsMag)
 		return 0;
+	else if(thisMag < rhsMag) // no need to do <= or >= since the == is checked first anyways
+		return -1;
+	else if(thisMag > rhsMag)
+		return 1;
+	else
+		return -1;
 }
 
 /*
