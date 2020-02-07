@@ -50,9 +50,9 @@ overloads << operator
 std::ostream& operator<<(std::ostream& ost, const Color& color)
 {
 	if(color._reset)
-		ost << "\033[0m]";
+		ost << "\033[0m";
 	else	
-		ost << "\033[38;2;" + std::to_string(_red) + ";" + std::to_string(_green) + ";" + std::to_string(_blue) + "m";
+		ost << "\033[38;2;" + std::to_string(color._red) + ";" + std::to_string(color._green) + ";" + std::to_string(color._blue) + "m";
 
 	return ost;
 }
@@ -63,8 +63,36 @@ overloads >> operator
 */
 std::istream& operator>>(std::istream& ist, Color& color)
 {
-	int r, g, b;
-	if(ist >> r >> g >> b)
+	std::string rgb;	
+	int r, g, b, pos;
+	//pos is the position of the character ( or , before the current digit trying to be found
+	if(ist >> rgb)
+	{
+		//assuming the rgb value is typed in the format (red,green,blue)
+		pos = 0;	
+		for(int i=1; i<rgb.length(); ++i)
+		{
+			if(rgb[pos] == '(' && rgb[i] == ',')
+			{
+				//converts the str to an int
+				r = std::stoi(rgb.substr(pos+1,i-pos-1),nullptr,10);
+				pos = i;
+			}
+			else if(rgb[pos] == ',' && rgb[i] == ',')
+			{
+				g = std::stoi(rgb.substr(pos+1,i-pos-1),nullptr,10);
+				pos = i;
+			}
+			else if(rgb[pos] == ',' && rgb[i] == ')')
+			{
+				b = std::stoi(rgb.substr(pos+1,i-pos-1),nullptr,10);
+				pos = i;
+			}
+		}
+		//checking if within values of rgb
+		if(r<0 || r>255 || g<0 || g>255 || b<0 || b>255)
+			throw std::runtime_error("RGB values not within range");
 		color = Color{r,g,b};
+	}
 	return ist;
 }

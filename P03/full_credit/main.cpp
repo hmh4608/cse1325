@@ -15,7 +15,7 @@ int main()
 
 	//asks user for 3 integers representing red, green, and blue
 	Color color;
-	std::cout << "Enter the color as (red, green, blue): ";
+	std::cout << "Enter the color as (red,green,blue) with values within 0-255: ";
 	std::cin >> color;
 	//prints the user-entered color's string representation in its representative color
 	std::cout << color << color.to_string() << Color{} << std::endl;
