@@ -46,6 +46,71 @@ int Color::compare(const Color& rhs)
 		return -1;
 }
 
+//overloading operators
+
+/*
+*Adds RGB colors of this object and rhs object together to make a new color
+*Also checks if it excedes 255
+*/
+Color Color::operator+(const Color& rhs)
+{
+	Color c{*this}; //temp copy of this object
+	int newR, newG, newB;	
+
+	newR = c._red + rhs._red;
+	newG = c._green + rhs._green;
+	newB = c._blue + rhs._blue;
+
+	if(newR > 255)
+		newR = 255;
+	else if(newG > 255)
+		newG = 255;
+	else if(newB > 255)
+		newB = 255;
+
+	c._red = newR;
+	c._green = newG;
+	c._blue = newB;
+
+	return c;
+}
+
+/*
+symmetrical operator+
+*/
+Color operator+(const Color& rhs, Color& color)
+{
+	return color + rhs;
+}
+
+/*
+symmetrical operator-
+*/
+Color operator-(const Color& rhs, Color& color)
+{
+	return color - rhs;
+}
+
+/*
+*subtracts RGB values of this object and rhs object
+*prevents negative numbers via std::abs()
+*/
+Color Color::operator-(const Color& rhs)
+{
+	Color c{*this};
+	int newR, newG, newB;
+
+	newR = std::abs(c._red - rhs._red);
+	newG = std::abs(c._green - rhs._green);
+	newB = std::abs(c._blue - rhs._blue);
+	
+	c._red = newR;
+	c._green = newG;
+	c._blue = newB;
+
+	return c;
+}
+
 /*
 stream out ANSI escape codes and colorizes
 overloads << operator

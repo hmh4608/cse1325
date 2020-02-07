@@ -24,6 +24,10 @@ class Color
 	inline bool operator>(const Color& rhs){ return (compare(rhs) > 0); }
 	inline bool operator>=(const Color& rhs){ return (compare(rhs) >= 0); }
 
+	//overloading other operators
+	Color operator+(const Color& rhs);
+	Color operator-(const Color& rhs);
+
 	//functions
 	friend std::ostream& operator<<(std::ostream& ost, const Color& color);
 	friend std::istream& operator>>(std::istream& ist, Color& color);
@@ -37,5 +41,9 @@ class Color
 	bool _reset;
 	bool _background;
 };
+
+//operator symmetry
+Color operator+(const Color& rhs, Color& color);
+Color operator-(const Color& rhs, Color& color);
 
 #endif
