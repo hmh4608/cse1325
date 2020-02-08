@@ -34,9 +34,21 @@ class Color
 	Color& operator--();
 	Color operator--(int);
 
-	//functions
+	//functions since the operator will be called on std::ostream and not the class
 	friend std::ostream& operator<<(std::ostream& ost, const Color& color);
 	friend std::istream& operator>>(std::istream& ist, Color& color);
+
+	//predefined colors :O - static for accessibility and const so we don't want someone accidentally changing them
+	static const Color RESET;
+	static const Color BLACK;
+	static const Color BLUE;
+	static const Color GREEN;
+	static const Color CYAN;
+	static const Color RED;
+	static const Color MAGENTA;
+	static const Color YELLOW;
+	static const Color GRAY;
+	static const Color WHITE;
 
 	//private stuff
 	private:

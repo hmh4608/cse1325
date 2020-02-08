@@ -8,6 +8,18 @@ Color::Color() : _red{0}, _green{0}, _blue{0}, _reset{true}, _background{false} 
 Color::Color(int red, int green, int blue) : _red{red}, _green{green}, _blue{blue}, _reset{false}, _background{false} {}
 Color::Color(int red, int green, int blue, bool bg) : _red{red}, _green{green}, _blue{blue}, _reset{false}, _background{true} {}
 
+//predefined COLORS
+const Color Color::RESET = Color{};
+const Color Color::BLACK = Color{0,0,0};
+const Color Color::BLUE = Color{0,0,255};
+const Color Color::GREEN = Color{0,255,0};
+const Color Color::CYAN = Color{0,255,255};
+const Color Color::RED = Color{255,0,0};
+const Color Color::MAGENTA = Color{255,0,255};
+const Color Color::YELLOW = Color{255,255,0};
+const Color Color::GRAY = Color{128,128,128};
+const Color Color::WHITE = Color{255,255,255};
+
 /*
 method returns string representation of the RGB color
 */
