@@ -6,7 +6,7 @@
 //constructors
 Color::Color() : _red{0}, _green{0}, _blue{0}, _reset{true}, _background{false} {}
 Color::Color(int red, int green, int blue) : _red{red}, _green{green}, _blue{blue}, _reset{false}, _background{false} {}
-Color::Color(int red, int green, int blue, bool bg) : _red{red}, _green{green}, _blue{blue}, _reset{false}, _background{true} {}
+Color::Color(int red, int green, int blue, bool bg) : _red{red}, _green{green}, _blue{blue}, _reset{false}, _background{bg} {}
 
 //predefined COLORS
 const Color Color::RESET = Color{};
