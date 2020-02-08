@@ -35,8 +35,39 @@ int main()
 		 << babl << babl.to_string() << Color::RESET << " = 128 + " << colors[3] << colors[3].to_string() << "\n" 
 		 << dark_red << dark_red.to_string() << Color::RESET << " = " << colors[1] << colors[1].to_string() << Color::RESET << " - 128" << std::endl;
 
+
+	std::cout << colors[1] << bg_blue << "Red\t" << colors[8] << "White" << Color::RESET << std::endl;
+
+	//red to white for fun
+	Color color = Color::RED;
+	while(color != Color::WHITE)
+	{
+		color = color + 16;		
+		std::cout << color << color.to_string() << std::endl;
+	}
+
+	//last few lines - testing increment and decrement
+	color = Color::CYAN;
+	std::cout << ++color << color.to_string() << Color::RESET << " Pre-Increment\n" 
+		<< color++ << color.to_string() << Color::RESET << " Post-Increment\n"
+		<< --color << color.to_string() << Color::RESET << " Pre-Decrement\n"
+		<< color-- << color.to_string() << Color::RESET << " Post-Decrement" 			<< std::endl;
+
+	//black to white and white to black
+	color = Color::BLACK;
+	while(color != Color::WHITE)
+	{
+		++color;
+		std::cout << color << "+";
+	}
+	while(color != Color::BLACK)
+	{
+		--color;
+		std::cout << color << "-";
+	}
+
 	//reset the terminal color
-	std::cout << Color::RESET;
+	std::cout << Color::RESET << std::endl;
 
 	return 0;
 }
