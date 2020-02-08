@@ -63,9 +63,9 @@ Color Color::operator+(const Color& rhs)
 
 	if(newR > 255)
 		newR = 255;
-	else if(newG > 255)
+	if(newG > 255)
 		newG = 255;
-	else if(newB > 255)
+	if(newB > 255)
 		newB = 255;
 
 	c._red = newR;
@@ -74,23 +74,6 @@ Color Color::operator+(const Color& rhs)
 
 	return c;
 }
-
-/*
-symmetrical operator+
-*/
-Color operator+(const Color& rhs, Color& color)
-{
-	return color + rhs;
-}
-
-/*
-symmetrical operator-
-*/
-Color operator-(const Color& rhs, Color& color)
-{
-	return color - rhs;
-}
-
 /*
 *subtracts RGB values of this object and rhs object
 *prevents negative numbers via std::abs()
@@ -100,15 +83,87 @@ Color Color::operator-(const Color& rhs)
 	Color c{*this};
 	int newR, newG, newB;
 
-	newR = std::abs(c._red - rhs._red);
-	newG = std::abs(c._green - rhs._green);
-	newB = std::abs(c._blue - rhs._blue);
-	
+	newR = c._red - rhs._red;
+	newG = c._green - rhs._green;
+	newB = c._blue - rhs._blue;
+
+	if(newR < 0)
+		newR = 0;
+	if(newG < 0)
+		newG = 0;
+	if(newB < 0)
+		newB = 0;
+
 	c._red = newR;
 	c._green = newG;
 	c._blue = newB;
 
 	return c;
+}
+/*
+*adds the integer n to each RGB value of this object
+*checks if it exceeds 255
+*/
+Color Color::operator+(int n)
+{
+	Color c{*this};
+	int newR, newG, newB;
+
+	newR = c._red + n;
+	newG = c._green + n;
+	newB = c._blue + n;
+
+	if(newR > 255)
+		newR = 255;
+	if(newG > 255)
+		newG = 255;
+	if(newB > 255)
+		newB = 255;
+
+	c._red = newR;
+	c._green = newG;
+	c._blue = newB;
+
+	return c;
+}
+/*
+*subtracts integer n from each RGB value of this object
+*checks if result is a negative number
+*/
+Color Color::operator-(int n)
+{	
+	Color c{*this};	
+
+	int newR, newG, newB;
+	
+	newR = c._red - n;
+	newG = c._green - n;
+	newB = c._blue - n;
+	
+	if(newR < 0)
+		newR = 0;
+	if(newG < 0)
+		newG = 0;
+	if(newB < 0)
+		newB = 0;
+
+	c._red = newR;
+	c._green = newG;
+	c._blue = newB;
+
+	return c;
+}
+
+/*
+*symmetrical operators since n + rhs isn't the same as rhs + n unless we do this
+*/
+Color operator+(int n, const Color& rhs)
+{
+	return rhs + n;
+}
+Color operator-(int n, const Color& rhs)
+{
+	return rhs + n;
 }
 
 /*

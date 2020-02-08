@@ -27,6 +27,8 @@ class Color
 	//overloading other operators
 	Color operator+(const Color& rhs);
 	Color operator-(const Color& rhs);
+	Color operator+(int n);
+	Color operator-(int n);
 
 	//functions
 	friend std::ostream& operator<<(std::ostream& ost, const Color& color);
@@ -43,7 +45,7 @@ class Color
 };
 
 //operator symmetry
-Color operator+(const Color& rhs, Color& color);
-Color operator-(const Color& rhs, Color& color);
+Color operator+(int n, const Color& rhs);
+Color operator-(int n, const Color& rhs);
 
 #endif
