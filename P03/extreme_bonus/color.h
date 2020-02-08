@@ -33,6 +33,8 @@ class Color
 	Color operator++(int); //post-increment
 	Color& operator--();
 	Color operator--(int);
+	Color operator*(const Color& rhs);
+	Color operator/(const Color& rhs);
 
 	//functions since the operator will be called on std::ostream and not the class
 	friend std::ostream& operator<<(std::ostream& ost, const Color& color);

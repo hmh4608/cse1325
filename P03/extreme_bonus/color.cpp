@@ -60,6 +60,7 @@ int Color::compare(const Color& rhs)
 
 //overloading operators
 
+//lightening and darkening colors
 /*
 *Adds RGB colors of this object and rhs object together to make a new color
 *Also checks if it excedes 255
@@ -211,6 +212,45 @@ Color Color::operator--(int)
 {
 	Color c{*this};
 	--*this;
+	return c;
+}
+
+//color blending
+/*
+*averages each respective _red, _green, _blue value from this object and rhs object to make a new color
+*/
+Color Color::operator*(const Color& rhs)
+{
+	Color c{*this};
+	
+	c._red = (c._red + rhs._red)/2;
+	c._green = (c._green + rhs._green)/2;
+	c._blue = (c._blue + rhs._blue)/2;
+
+	return c;
+}
+/*
+*unblends by de-averaging each RGB value of this object
+*/
+Color Color::operator/(const Color& rhs)
+{
+	Color c{*this};
+	
+	c._red *= 2;
+	c._green *= 2;
+	c._blue *= 2;
+
+	c._red -= rhs._red;
+	c._green -= rhs._green;
+	c._blue -= rhs._blue;
+
+	if(c._red < 0)
+		c._red = 0;
+	if(c._green < 0)
+		c._green = 0;
+	if(c._blue < 0)
+		c._blue = 0;
+
 	return c;
 }
 

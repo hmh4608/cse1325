@@ -6,7 +6,7 @@
 int main()
 {
 	std::vector<Color> colors = { Color::BLACK, Color::RED, Color::GREEN, Color::BLUE, Color::CYAN, Color::MAGENTA, Color::YELLOW, Color::GRAY, Color::WHITE };
-	Color bg_blue{0,0,255,true}; //blue background color
+	Color bg_cyan{0,255,255,true}; //cyan background color
 	Color bg_white{255,255,255,true}; //white background color
 
 	//output comparisons for previous color
@@ -35,11 +35,19 @@ int main()
 		 << babl << babl.to_string() << Color::RESET << " = 128 + " << colors[3] << colors[3].to_string() << "\n" 
 		 << dark_red << dark_red.to_string() << Color::RESET << " = " << colors[1] << colors[1].to_string() << Color::RESET << " - 128" << std::endl;
 
+	//color blending and de-blending tests via * and / operators
+	Color yellow = Color::YELLOW;
+	Color red = Color::RED;
+	Color orange = red * yellow;
+	Color red2 = orange/yellow;
 
-	std::cout << colors[1] << bg_blue << "Red\t" << colors[8] << "White" << Color::RESET << std::endl;
+	std::cout << orange << orange.to_string() << Color::RESET << " = " << red << red.to_string() << Color::RESET << " * " << yellow << yellow.to_string() << "\n"
+		<< red2 << red2.to_string() << Color::RESET << " = " << orange << orange.to_string() << Color::RESET << " / " << yellow << yellow.to_string() << std::endl;
 
-	//red to white for fun
-	Color color = Color::RED;
+	std::cout << colors[4] << bg_white << "CYAN\t" << colors[8] << bg_cyan << "WHITE" << Color::RESET << std::endl;
+
+	//cyan to white for fun
+	Color color = Color::CYAN;
 	while(color != Color::WHITE)
 	{
 		color = color + 16;		
@@ -47,7 +55,7 @@ int main()
 	}
 
 	//last few lines - testing increment and decrement
-	color = Color::CYAN;
+	color = Color::RED;
 	std::cout << ++color << color.to_string() << Color::RESET << " Pre-Increment\n" 
 		<< color++ << color.to_string() << Color::RESET << " Post-Increment\n"
 		<< --color << color.to_string() << Color::RESET << " Pre-Decrement\n"
