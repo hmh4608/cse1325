@@ -153,17 +153,53 @@ Color Color::operator-(int n)
 
 	return c;
 }
-
 /*
 *symmetrical operators since n + rhs isn't the same as rhs + n unless we do this
 */
-Color operator+(int n, const Color& rhs)
+Color operator+(int n, Color& rhs)
 {
 	return rhs + n;
 }
-Color operator-(int n, const Color& rhs)
+Color operator-(int n, Color& rhs)
 {
 	return rhs + n;
+}
+
+//pre and post increment
+Color& Color::operator++()
+{
+	if(_red != 255)
+		++_red;
+	if(_green != 255)
+		++_green;
+	if(_blue != 255)
+		++_blue;
+	
+	return *this;
+}
+Color Color::operator++(int)
+{
+	Color c{*this}; //create a copy of this object to store original content
+	++*this;
+	return c;
+}
+//pre nad post decrement
+Color& Color::operator--()
+{
+	if(_red != 0)
+		--_red;
+	if(_green != 0)
+		--_green;
+	if(_blue != 0)
+		--_blue;
+
+	return *this;
+}
+Color Color::operator--(int)
+{
+	Color c{*this};
+	--*this;
+	return c;
 }
 
 /*

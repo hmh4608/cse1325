@@ -29,6 +29,10 @@ class Color
 	Color operator-(const Color& rhs);
 	Color operator+(int n);
 	Color operator-(int n);
+	Color& operator++(); //pre-increment
+	Color operator++(int); //post-increment
+	Color& operator--();
+	Color operator--(int);
 
 	//functions
 	friend std::ostream& operator<<(std::ostream& ost, const Color& color);
@@ -43,9 +47,8 @@ class Color
 	bool _reset;
 	bool _background;
 };
-
 //operator symmetry
-Color operator+(int n, const Color& rhs);
-Color operator-(int n, const Color& rhs);
+Color operator+(int n, Color& rhs);
+Color operator-(int n, Color& rhs);
 
 #endif

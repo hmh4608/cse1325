@@ -14,9 +14,13 @@ int main()
 	std::vector<Color> colors = { Color{255,0,0}, Color{0,255,0}, Color{0,0,255}, Color{255,255,255} };
 	Color bg_blue{0,0,255,true}; //blue background color
 	
-	Color pink = 128 + colors[0]; //fix later
+	//testing operator+ and -
+	Color pink = colors[0] + 128;
+	Color dark_red = colors[0] - 128;
 
-	std::cout << pink << pink.to_string() << std::endl;
+	colors.push_back(dark_red);
+	colors.push_back(pink);
+
 
 	//reset the terminal color
 	std::cout << Color{};
