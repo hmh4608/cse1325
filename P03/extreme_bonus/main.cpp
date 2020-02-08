@@ -7,17 +7,36 @@ int main()
 {
 	std::vector<Color> colors = { Color::BLACK, Color::RED, Color::GREEN, Color::BLUE, Color::CYAN, Color::MAGENTA, Color::YELLOW, Color::GRAY, Color::WHITE };
 	Color bg_blue{0,0,255,true}; //blue background color
-	
-	//testing operator+ and -
+	Color bg_white{255,255,255,true}; //white background color
+
+	//output comparisons for previous color
+	std::cout << colors[0] << bg_white << colors[0].to_string() << Color::RESET << std::endl;
+	std::string output;
+	for(int i=1; i<colors.size(); ++i)
+	{
+		output = " ";
+		if(colors[i] == colors[i-1]) output += "== ";
+		if(colors[i] != colors[i-1]) output += "!= ";
+		if(colors[i] < colors[i-1]) output += "< ";
+		if(colors[i] <= colors[i-1]) output += "<= ";
+		if(colors[i] > colors[i-1]) output += "> ";
+		if(colors[i] >= colors[i-1]) output += ">= ";
+
+		output += "in subjective brightness to the previous color";
+		std::cout << colors[i] << colors[i].to_string() << Color::RESET << output << std::endl;	
+	}
+
+	//testing + and - operators
 	Color pink = colors[1] + 128;
 	Color dark_red = colors[1] - 128;
-
-	colors.push_back(dark_red);
-	colors.push_back(pink);
-
+	Color babl = 128 + colors[3];
+	
+	std::cout << pink << pink.to_string() << Color::RESET << " = " << colors[1] << colors[1].to_string() << Color::RESET << " + 128\n"
+		 << babl << babl.to_string() << Color::RESET << " = 128 + " << colors[3] << colors[3].to_string() << "\n" 
+		 << dark_red << dark_red.to_string() << Color::RESET << " = " << colors[1] << colors[1].to_string() << Color::RESET << " - 128" << std::endl;
 
 	//reset the terminal color
-	std::cout << Color::RESET << std::endl;
+	std::cout << Color::RESET;
 
 	return 0;
 }
