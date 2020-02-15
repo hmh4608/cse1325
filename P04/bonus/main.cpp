@@ -19,11 +19,11 @@ int main()
 		{	
 			//menu outputs
 			std::cout << "====================\nCSE1325 COINS\n====================\n"
-			+ "(A)dd a coin\n"
-			+ "(L)ist all coins\n"
-			+ "(D)elete a coin\n\n"
-			+ "(Q)uit\n\n"
-			+ std::to_string(pouch.size()) + " coins >> ";
+			<< "(A)dd a coin\n"
+			<< "(L)ist all coins\n"
+			<< "(D)elete a coin\n\n"
+			<< "(Q)uit\n\n"
+			<< std::to_string(pouch.size()) + " coins >> ";
 
 		std::cin >> choice;
 
@@ -38,7 +38,7 @@ int main()
 		}
 
 		
-		}while(choice != 'Q' || choice != 'q')
+		}while(choice != 'Q' || choice != 'q');
 
 		return 0;
 	}

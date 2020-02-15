@@ -98,7 +98,7 @@ std::istream& operator>>(std::istream& ist, Coin& coin)
 
 	if(notes != "" || notes != "\n")
 	{
-		coin.addnote(notes);
+		coin.add_note(notes);
 	}
 
 	return ist;
