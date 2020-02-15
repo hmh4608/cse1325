@@ -1,10 +1,14 @@
 #Makefile for Coin
 
-CXXFLAGs = --std=c++17
+CXXFLAGS += --std=c++17
+
+all: test coin
+
+logger: CXXFLAGS += -DLOGGER
+logger: coin test
 
 rebuild: clean coin
 
-all: test coin
 coin: main.o coin.o *.h
 	$(CXX) $(CXXFLAGS) main.o coin.o -o coin
 test: test.o coin.o *.h

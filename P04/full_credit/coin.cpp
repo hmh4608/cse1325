@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include "coin.h"
+#include "logger.h"
 
 //function for enum class
 std::string to_string(Coin_size size)
@@ -15,10 +16,10 @@ std::string to_string(Coin_size size)
 }
 
 //constructors
-Coin::Coin(Coin_size size, Year year) : _size{size}, _year{year}, _notes{nullptr} {}
+Coin::Coin(Coin_size size, Year year) : _size{size}, _year{year}, _notes{nullptr} { LOG("Coin::Coin"); }
 Coin::Coin() : Coin{Coin_size::PENNY, 1792} {}
-Coin::Coin(const Coin& rhs) : _size{rhs._size}, _year{rhs._year}, _notes{new std::string{*(rhs._notes)}} {}
-Coin::~Coin() { delete _notes; } //destructor
+Coin::Coin(const Coin& rhs) : _size{rhs._size}, _year{rhs._year}, _notes{new std::string{*(rhs._notes)}} { LOG("Coin::Coin copy constructor"); }
+Coin::~Coin() { LOG("Coin::~Coin"); delete _notes; } //destructor
 
 //methods
 void Coin::add_note(std::string s)
@@ -44,7 +45,7 @@ Coin& Coin::operator=(const Coin& rhs)
 		_year = rhs._year;
 		_notes = new std::string{*(rhs._notes)};
 	}
-
+	LOG("Coin::operator=");
 	return *this;
 }
 std::ostream& operator<<(std::ostream& ost, const Coin& coin)
@@ -61,7 +62,7 @@ std::ostream& operator<<(std::ostream& ost, const Coin& coin)
 
 	if(coin._notes)
 	{
-		ost << *(coin._notes) << std::endl;
+		ost << *(coin._notes);
 	}
 	
 	return ost;
