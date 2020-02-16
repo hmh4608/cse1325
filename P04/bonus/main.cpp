@@ -38,14 +38,13 @@ int main()
 				default : throw std::runtime_error{"Invalid input"}; break;
 			}
 		}while(choice != 'q');
-
-		return 0;
 	}
 	catch(std::runtime_error e)
 	{
 		std::cerr << e.what() << std::endl;
 		return -1;
 	}
+	return 0;
 }
 
 //functions to do menu things
