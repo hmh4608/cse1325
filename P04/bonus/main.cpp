@@ -34,10 +34,10 @@ int main()
 				case 'A' : case 'a' : addCoin(pouch); break;
 				case 'L' : case 'l' : listCoins(pouch); break;
 				case 'D' : case 'd' : delCoin(pouch); break;
-				case 'Q' : case 'q' : std::cout << "Thank you for using my Coin System!\n"; break;
+				case 'Q' : case 'q' : std::cout << "Thank you for using my Coin System!\n"; if(choice == 'Q') choice == 'q'; break;
 				default : throw std::runtime_error{"Invalid input"}; break;
 			}
-		}while((choice != 'Q') || (choice != 'q'));
+		}while(choice != 'q');
 
 		return 0;
 	}
