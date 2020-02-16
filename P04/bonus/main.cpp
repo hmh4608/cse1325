@@ -86,6 +86,12 @@ void listCoins(const std::vector<Coin>& coins)
 */
 void delCoin(std::vector<Coin>& coins)
 {
+	if(coins.size() == 0)
+	{	
+		std::cout << "\nThere are no coins in the pouch." << std::endl;
+		return;
+	}	
+
 	int target;	
 	std::cout << "Enter the index number of the coin you would like to delete: ";
 	std::cin >> target;
