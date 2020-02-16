@@ -19,27 +19,25 @@ int main()
 		do
 		{	
 			//menu outputs
-			std::cout << "====================\nCSE1325 COINS\n====================\n"
+			std::cout << "===================\nCSE1325 COINS\n===================\n"
 			<< "(A)dd a coin\n"
 			<< "(L)ist all coins\n"
 			<< "(D)elete a coin\n\n"
 			<< "(Q)uit\n\n"
 			<< std::to_string(pouch.size()) + " coins >> ";
-
-		std::cin >> choice;
-
-		//run based on selection
-		switch(choice)
-		{
-			case 'A' : case 'a' : addCoin(pouch); break;
-			case 'L' : case 'l' : listCoins(pouch); break;
-			case 'D' : case 'd' : delCoin(pouch); break;
-			case 'Q' : case 'q' : std::cout << "Thank you for using my Coin System!" << std::endl;
-			default : throw std::runtime_error{"Invalid input"}; break;
-		}
-
 		
-		}while(choice != 'Q' || choice != 'q');
+			std::cin >> choice;
+
+			//run based on selection
+			switch(choice)
+			{
+				case 'A' : case 'a' : addCoin(pouch); break;
+				case 'L' : case 'l' : listCoins(pouch); break;
+				case 'D' : case 'd' : delCoin(pouch); break;
+				case 'Q' : case 'q' : std::cout << "Thank you for using my Coin System!\n"; break;
+				default : throw std::runtime_error{"Invalid input"}; break;
+			}
+		}while((choice != 'Q') || (choice != 'q'));
 
 		return 0;
 	}
@@ -57,9 +55,10 @@ int main()
 void addCoin(std::vector<Coin>& coins)
 {
 	Coin coin;
-	std::cout << "Coin (year size \n notes): ";
+	std::cout << "Coin (year size \\n notes): ";
 	std::cin >> coin;
 	coins.push_back(coin);
+	std::cout << std::endl;
 }
 /*
 *lists each coin's vector [index] and output the coin's operator<<
@@ -67,12 +66,19 @@ void addCoin(std::vector<Coin>& coins)
 */
 void listCoins(const std::vector<Coin>& coins)
 {
-	std::cout << "ooooooooooooooooooo\nC O I N  P O U C H\noooooooooooooooooooo" << std::endl;
-	//loop to print out all the coins
-	for(int i=0; i<coins.size(); ++i)
+	if(coins.size() == 0)
+	{	
+		std::cout << "\nThere are no coins in the pouch." << std::endl;
+	}	
+	else
 	{
-		//.at(i) will throw out of range exception if index isn't right'		
-		std::cout << "[" << i << "] " << coins.at(i);
+		std::cout << "\n\nooooooooooooooooooo\nC O I N  P O U C H\nooooooooooooooooooo" << std::endl;
+		//loop to print out all the coins
+		for(int i=0; i<coins.size(); ++i)
+		{
+			//.at(i) will throw out of range exception if index isn't right'		
+			std::cout << "[" << i << "] " << coins.at(i) << "\n" << std::endl;
+		}
 	}
 }
 /*
@@ -87,6 +93,6 @@ void delCoin(std::vector<Coin>& coins)
 	if(!(target>=INT_MIN) && !(target<=INT_MAX))
 		throw std::out_of_range{"Not within bounds"};
 	else
-		coins.erase(*(coins.begin()) + target); //delete coin at specified index
+		coins.erase(coins.begin() + target); //delete coin at specified index
 	std::cout << "Coin at index [" << target << "] deleted!" << std::endl;
 }

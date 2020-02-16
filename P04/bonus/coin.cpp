@@ -72,10 +72,12 @@ std::ostream& operator<<(std::ostream& ost, const Coin& coin)
 }
 std::istream& operator>>(std::istream& ist, Coin& coin)
 {
-	std::string coin_sz, newln, notes;
+	std::string coin_sz, notes;
 
 	//>> skips whitespace
-	ist >> coin._year >> coin_sz >> newln >> notes;
+	ist >> coin._year >> coin_sz;
+	ist.ignore(); //ignore \n left behind
+	std::getline(ist, notes);
 
 	//convert to all lowercase letters if needed
 	for(int i = 0; i<coin_sz.length(); ++i)
