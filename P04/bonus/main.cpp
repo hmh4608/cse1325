@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <climits>
 #include <vector>
 #include "coin.h"
 
@@ -66,10 +67,26 @@ void addCoin(std::vector<Coin>& coins)
 */
 void listCoins(const std::vector<Coin>& coins)
 {
+	std::cout << "ooooooooooooooooooo\nC O I N  P O U C H\noooooooooooooooooooo" << std::endl;
+	//loop to print out all the coins
+	for(int i=0; i<coins.size(); ++i)
+	{
+		//.at(i) will throw out of range exception if index isn't right'		
+		std::cout << "[" << i << "] " << coins.at(i);
+	}
 }
 /*
 *asks for the index number of the coin to delete and erases it
 */
 void delCoin(std::vector<Coin>& coins)
 {
+	int target;	
+	std::cout << "Enter the index number of the coin you would like to delete: ";
+	std::cin >> target;
+	//check if its an integer
+	if(!(target>=INT_MIN) && !(target<=INT_MAX))
+		throw std::out_of_range{"Not within bounds"};
+	else
+		coins.erase(*(coins.begin()) + target); //delete coin at specified index
+	std::cout << "Coin at index [" << target << "] deleted!" << std::endl;
 }
