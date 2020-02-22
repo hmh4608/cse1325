@@ -19,5 +19,5 @@ double Taxfree::price() const
 }
 Product* Taxfree::clone() const
 {
-	new Taxfree{_name, _cost};
+	return new Taxfree{_name, _cost};
 }
