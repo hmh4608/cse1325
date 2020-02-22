@@ -41,7 +41,7 @@ Welcome to the Store!
 			{
 				throw std::runtime_error("Product index input is invalid");
 			}
-			else
+			else if(quantity != 0)
 			{
 				goods[product]->set_quantity(goods[product]->get_quantity() + quantity);
 				total = 0;
