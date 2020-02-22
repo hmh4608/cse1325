@@ -2,12 +2,13 @@
 #include <string>
 #include <iomanip>
 #include "product.h"
+#include "logger.h"
 
 //implementations of Product
 
 //constructor and destructor
-Product::Product(std::string name, double cost) : _name{name}, _cost{cost}, _quantity{0} { if(_cost < 0) throw std::runtime_error("Cost is Negative"); }
-Product::~Product() {}
+Product::Product(std::string name, double cost) : _name{name}, _cost{cost}, _quantity{0} { if(_cost < 0) throw std::runtime_error("Cost is Negative"); LOG("Product(std::string name, double cost)"); }
+Product::~Product() { LOG("~Product()"); }
 
 //method(s)
 

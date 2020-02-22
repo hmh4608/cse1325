@@ -1,14 +1,15 @@
 #include <iostream>
 #include <string>
 #include "taxed.h"
+#include "logger.h"
 
 //implementation of the derived class Taxed that is a Product
 
 double Taxed::_tax = 0;
 
 //constructor and destructor
-Taxed::Taxed(std::string name, double cost) : Product(name, cost) {}
-Taxed::~Taxed() {}
+Taxed::Taxed(std::string name, double cost) : Product(name, cost) { LOG("Taxed(std::string name, double cost)"); }
+Taxed::~Taxed() { LOG("~Taxed()"); }
 
 //methods
 /*

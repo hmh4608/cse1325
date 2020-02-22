@@ -64,5 +64,12 @@ Welcome to the Store!
 
 	}while(quantity != 0);
 
+	//lets clear the heap
+	for(auto& item : goods)
+	{
+		delete item;
+	}
+	goods.clear();
+
 	return 0;
 }

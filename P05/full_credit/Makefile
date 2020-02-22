@@ -2,6 +2,9 @@ CXXFLAGS += --std=c++17
 
 all: store
 
+logger: CXXFLAGS += -DLOGGER
+logger: store
+
 rebuild: clean store
 
 store: store.o product.o taxed.o taxfree.o *.h
