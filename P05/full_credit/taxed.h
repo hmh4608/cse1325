@@ -2,6 +2,8 @@
 #define __TAXED_H
 
 #include <string>
+#include "product.h"
+
 //class declaration of taxed which is a product
 
 class Taxed : public Product
@@ -13,7 +15,7 @@ class Taxed : public Product
 
 	//methods
 	static void set_tax_rate(double sales_tax);
-	virtual double price() const override;
+	double price() const override;
 
 	private:
 	static double _tax;

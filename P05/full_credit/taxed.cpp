@@ -4,6 +4,8 @@
 
 //implementation of the derived class Taxed that is a Product
 
+double Taxed::_tax = 0;
+
 //constructor and destructor
 Taxed::Taxed(std::string name, double cost) : Product(name, cost) {}
 Taxed::~Taxed() {}
@@ -12,7 +14,7 @@ Taxed::~Taxed() {}
 /*
 *static method that assigns parameter to _tax static attribute
 */
-static void Taxed::set_tax_rate(double sales_tax)
+void Taxed::set_tax_rate(double sales_tax)
 {
 	_tax = sales_tax;
 }
@@ -20,7 +22,7 @@ static void Taxed::set_tax_rate(double sales_tax)
 /*
 *returns double total prices as quantity * cost * (1 + tax)
 */
-double Taxed::price() const override
+double Taxed::price() const
 {
 	validate();	
 	return _quantity * _cost * (1 + _tax);

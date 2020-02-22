@@ -12,8 +12,7 @@ Taxfree::~Taxfree() {}
 *override Product::price()
 *returns total prices as quantity * cost
 */
-double Taxfree::price() const override
-{
-	validate();	
-	_quantity * cost;
+double Taxfree::price() const
+{	
+	return _quantity * _cost;
 }

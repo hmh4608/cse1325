@@ -4,6 +4,9 @@ CXXFLAGS += --std=c++17
 
 all: test coin
 
+debug: CXXFLAGS += -g
+debug: coin
+
 logger: CXXFLAGS += -DLOGGER
 logger: test coin
 

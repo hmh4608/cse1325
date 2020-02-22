@@ -15,9 +15,10 @@ class Product
 	
 	//methods
 	void set_quantity(int quantity);
+	int get_quantity() const;
 	virtual double price() const = 0; //pure virtual method, no implementation atm
 	friend std::ostream& operator<<(std::ostream& ost, const Product& product);
-	void validate(); //validates inputs
+	void validate() const; //validates inputs
 
 	protected:
 	int _quantity; //the only mutable int, represents how many are to be purchased
