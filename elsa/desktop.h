@@ -9,7 +9,7 @@ class Desktop
 {
 	public:
 	void add_option(Options& option);
-	double price();
+	double price() const;
 	friend std::ostream& operator<<(std::ostream& ost, const Desktop& desktop);
 	
 	private:

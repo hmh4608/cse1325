@@ -13,7 +13,7 @@ class Order
 	~Order();
 	void add_product(Desktop& desktop);
 	double price();
-	friend std::ostream& operator<<(std::ostream& ost, Order& order);
+	friend std::ostream& operator<<(std::ostream& ost, const Order& order);
 
 	private:
 	Customer& _customer;

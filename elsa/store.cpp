@@ -24,7 +24,7 @@ Customer& Store::customer(int index)
 //options
 void Store::add_option(Options& option)
 {
-	options.push_back(option);
+	options.push_back(&option);
 }
 int Store::num_options()
 {
@@ -32,22 +32,22 @@ int Store::num_options()
 }
 Options& Store::option(int index)
 {
-	return options.at(index);
+	return *(options.at(index));
 }
 
 //desktop
 //pushes new object into vector and returns its index
 int Store::new_desktop()
 {
-	desktops.push_back(new Desktop{});
+	desktops.push_back(Desktop{});
 	return num_desktops()-1;
 }
 //given index of the option to add to the desktop at the provided index
 void Store::add_option(int option, int desktop)
 {
-	(desktop(desktop)).add_option(option(option));
+	(this->desktop(desktop)).add_option(this->option(option));
 }
-int num_desktops()
+int Store::num_desktops()
 {
 	return desktops.size();
 }
@@ -59,12 +59,12 @@ Desktop& Store::desktop(int index)
 //orders
 int Store::new_order(int customer)
 {
-	orders.push_back(new Order{customer(customer)});
+	orders.push_back(Order{this->customer(customer)});
 	return num_orders()-1;
 }
 void Store::add_desktop(int desktop, int order)
 {
-	order(order).add_product(desktop(desktop));
+	(this->order(order)).add_product(this->desktop(desktop));
 }
 int Store::num_orders()
 {

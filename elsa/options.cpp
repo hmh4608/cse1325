@@ -9,18 +9,18 @@ Options::Options(std::string name, double cost) : _name{name}, _cost{cost} {}
 Options::~Options() {}
 
 //methods
-double Options::cost()
+double Options::cost() const
 {
 	return _cost;
 }
 
-std::string Options::to_string()
+std::string Options::to_string() const
 {
 	return _name;
 }
 
 std::ostream& operator<<(std::ostream& ost, const Options& option)
 {
-	ost << to_string() + " $" << cost();
+	ost << option.to_string() + " $" << option.cost();
 	return ost;
 }

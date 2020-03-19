@@ -9,15 +9,15 @@
 //adds Option ref to vector options
 void Desktop::add_option(Options& option)
 {
-	options.push_back(option);
+	options.push_back(&option);
 }
 //returns sum of option costs
-double Desktop::price()
+double Desktop::price() const
 {
 	double sum = 0;	
 	for(auto& o : options)
 	{
-		sum += o.cost();
+		sum += o->cost();
 	}
 	return sum;
 }

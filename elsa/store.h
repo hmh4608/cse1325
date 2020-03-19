@@ -17,7 +17,7 @@ class Store
 	Customer& customer(int index);
 	void add_option(Options& option);
 	int num_options();
-	Options& option();
+	Options& option(int index);
 	int new_desktop();
 	void add_option(int option, int desktop);
 	int num_desktops();
