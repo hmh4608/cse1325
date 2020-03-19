@@ -13,7 +13,7 @@ class Customer
 	private:
 	std::string _name;
 	std::string _phone;
-	std::String _email;
+	std::string _email;
 };
 
 #endif

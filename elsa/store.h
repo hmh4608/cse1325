@@ -4,6 +4,10 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include "order.h"
+#include "options.h"
+#include "desktop.h"
+#include "customer.h"
 
 class Store
 {
@@ -12,6 +16,10 @@ class Store
 	int num_customers();
 	Customer& customer(int index);
 	void add_option(Options& option);
+	int num_options();
+	Options& option();
+	int new_desktop();
+	void add_option(int option, int desktop);
 	int num_desktops();
 	Desktop& desktop(int index);
 	int new_order(int customer);
