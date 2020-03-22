@@ -24,6 +24,10 @@ double Desktop::price() const
 
 std::ostream& operator<<(std::ostream& ost, const Desktop& desktop)
 {
-	ost << 	"$" << desktop.price();
+	for(auto& o : desktop.options)
+	{
+		ost << *o << " ";
+	}	
+	ost << 	"/ total for current product: $" << desktop.price();
 	return ost;
 }
