@@ -21,6 +21,7 @@ std::string Options::to_string() const
 
 std::ostream& operator<<(std::ostream& ost, const Options& option)
 {
+	if(option.cost() < 0) throw std::runtime_error("Cost is negative");	
 	ost << option.to_string() + " $" << option.cost();
 	return ost;
 }

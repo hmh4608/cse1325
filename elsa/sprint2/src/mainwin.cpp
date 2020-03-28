@@ -149,11 +149,11 @@ void Mainwin::on_view_customer_click()
 
 	if(store->num_customers() <= 0)
 	{
-		oss << "<span size='14000' weight='bold'>There are currently no customers. To add a customer, click Insert > Customer</span>\n";
+		oss << "<span size='14000' weight='bold'>There are currently no customers. To add a customer, click Insert > Customer.</span>";
 	}
 	else
 	{
-		oss << "<span size='24000' weight='bold'>Customers</span>\n\n<span size='16000'>";		
+		oss << "<span size='20000' weight='bold'>Customers</span>\n\n<span size='14000'>";		
 		//list all customers
 		for(int i=0; i<store->num_customers(); ++i)
 		{
@@ -168,6 +168,26 @@ void Mainwin::on_view_customer_click()
 //view > peripheral
 void Mainwin::on_view_peripheral_click()
 {
+	std::ostringstream oss;
+	
+	//if there are currently no options
+	if(store->num_options() <= 0)
+	{
+		oss << "<span size='14000' weight='bold'>There are currently no peripherals. To add a new peripheral, click Insert > Peripheral.</span>";
+	}
+	else
+	{
+		oss << "<span size='20000' weight='bold'>Peripherals</span>\n\n<span size='14000'>";
+		//list all peripherals
+		for(int i=0; i<store->num_options(); ++i)
+		{
+			oss << i << ") " << store->option(i) << "\n";
+		}
+		oss << "</span>";
+	}
+
+	set_data(oss.str());
+	set_msg("");
 }
 
 //view > desktop
@@ -206,6 +226,18 @@ void Mainwin::on_insert_customer_click()
 //insert > peripheral
 void Mainwin::on_insert_peripheral_click()
 {
+	//prompts	
+	std::string s = get_string("Name of the new peripheral? ");
+	double cost = get_double("Cost? ");
+	try{
+		//add new peripheral to the list that's in store		
+		Options option{s, cost};
+		store->add_option(option);
+		on_view_peripheral_click();
+		set_msg("Added peripheral " + std::to_string(store->num_options()-1));
+	}catch(std::exception& e){
+		std::cerr << "Invalid peripheral: " << e.what() << std::endl;
+	}
 }
 
 //insert > desktop
@@ -237,11 +269,26 @@ std::string Mainwin::get_string(std::string prompt)
 }
 double Mainwin::get_double(std::string prompt)
 {
-	return std::stod(get_string(prompt));
+	double num;
+
+	try{
+		num = std::stod(get_string(prompt));
+		return num;
+	}catch(std::exception& e){
+		std::cerr << "Invalid entry" << e.what() << std::endl;	
+	}
+	return -1.0;
 }
 int Mainwin::get_int(std::string prompt)
 {
-	return std::stoi(get_string(prompt));
+	int num;	
+	try{
+		num = std::stoi(get_string(prompt));
+		return num;
+	}catch(std::exception& e){
+		std::cerr << "Invalid entry" << e.what() << std::endl;	
+	}
+	return -1;
 }
 
 //setters
