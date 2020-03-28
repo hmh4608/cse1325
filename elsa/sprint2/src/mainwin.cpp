@@ -1,12 +1,13 @@
 #include "mainwin.h"
 #include "entrydialog.h"
 #include <iostream> //for std::cerr logging
+#include <sstream>
 
 Mainwin::Mainwin() : store{new Store()} { 
 
 	//GUI SETUP//
 
-	set_default_size(400,200);
+	set_default_size(800,600);
 	set_title("Exceptional Laptops and Supercomputer Always (ELSA) Store");
 	
 	//put vertical box container as the window contents for nesting later
@@ -144,7 +145,24 @@ void Mainwin::on_quit_click()
 //view > customer
 void Mainwin::on_view_customer_click()
 {
-	
+	std::ostringstream oss;
+
+	if(store->num_customers() <= 0)
+	{
+		oss << "<span size='14000' weight='bold'>There are currently no customers. To add a customer, click Insert > Customer</span>\n";
+	}
+	else
+	{
+		oss << "<span size='24000' weight='bold'>Customers</span>\n\n<span size='16000'>";		
+		//list all customers
+		for(int i=0; i<store->num_customers(); ++i)
+		{
+			oss << i << ") " << store->customer(i) << "\n";
+		}
+		oss << "</span>";
+	}
+	set_data(oss.str());
+	set_msg("");
 }
 
 //view > peripheral
@@ -179,9 +197,9 @@ void Mainwin::on_insert_customer_click()
 		Customer customer{name, phone, email};		
 		store->add_customer(customer);
 
-		//update status bar and call on_view_customer_click to show the new customer that is added to the data area
-		set_msg("Added customer" + name);
+		//call on_view_customer_click to show the new customer that is added to the data area and update status bar
 		on_view_customer_click();
+		set_msg("Added customer " + name);
 	}
 }
 
