@@ -10,7 +10,7 @@ Mainwin::Mainwin() : store{new Store()} {
 	set_title("Exceptional Laptops and Supercomputer Always (ELSA) Store");
 	
 	//put vertical box container as the window contents for nesting later
-	Gtk::Box *vbox = Gtk::manage(new Gtk::Vbox); //manage will automatically delete all widgets from the heap if window closes
+	Gtk::Box *vbox = Gtk::manage(new Gtk::VBox); //manage will automatically delete all widgets from the heap if window closes
 	add(*vbox);
 
 	//MENU BAR//
@@ -21,7 +21,7 @@ Mainwin::Mainwin() : store{new Store()} {
 
 	//FILE//
 	//create file menu item and add to menu bar w/ accelerator to allow Alt+F
-	Gtk::MenuItem *menuitem_file = Gtk::manage(new Gtk::MenuItem("_File", true);
+	Gtk::MenuItem *menuitem_file = Gtk::manage(new Gtk::MenuItem("_File", true));
 	menubar->append(*menuitem_file);
 
 	//create menu drop down within menu item
@@ -29,10 +29,10 @@ Mainwin::Mainwin() : store{new Store()} {
 	menuitem_file->set_submenu(*filemenu);
 
 	//quit - append to file menu
-	Gtk::MenuItem *menuitem_quit = Gtk::manage(new Gtk::MenuItem("_Quit"), true);
+	Gtk::MenuItem *menuitem_quit = Gtk::manage(new Gtk::MenuItem("_Quit", true));
 	//watch for when clicked
 	menuitem_quit->signal_activate().connect([this] {this->on_quit_click();});
-	filmenu->append(*menuitem_quit);
+	filemenu->append(*menuitem_quit);
 
 	//--------------
 
@@ -77,7 +77,7 @@ Mainwin::Mainwin() : store{new Store()} {
 	menuitem_insert->set_submenu(*insertmenu);
 
 	//customer - append to insert menu
-	Gtk::MenuItem *menuitem_insert_customer = Gtk::manage(new Gtk::Menuitem("_Customer", true));
+	Gtk::MenuItem *menuitem_insert_customer = Gtk::manage(new Gtk::MenuItem("_Customer", true));
 	menuitem_insert_customer->signal_activate().connect([this] {this->on_insert_customer_click();});
 	insertmenu->append(*menuitem_insert_customer);
 
@@ -92,7 +92,7 @@ Mainwin::Mainwin() : store{new Store()} {
 	insertmenu->append(*menuitem_insert_desktop);
 
 	//order - insert menu
-	Gtk::MenuItem *menuitem_insert_order = Gtk::manage(new MenuItem("_Order", true));
+	Gtk::MenuItem *menuitem_insert_order = Gtk::manage(new Gtk::MenuItem("_Order", true));
 	menuitem_insert_order->signal_activate().connect([this] {this->on_insert_order_click();});
 	insertmenu->append(*menuitem_insert_order);
 
@@ -129,13 +129,14 @@ Mainwin::Mainwin() : store{new Store()} {
 	//make the box and everything in it visible
 	vbox->show_all();
 }
-~Mainwin::~Mainwin() {}
+Mainwin::~Mainwin() {}
 
 //methods
 
 //FILE > QUIT//
 void Mainwin::on_quit_click()
 {
+	close();
 }
 
 
@@ -143,6 +144,7 @@ void Mainwin::on_quit_click()
 //view > customer
 void Mainwin::on_view_customer_click()
 {
+	
 }
 
 //view > peripheral
@@ -165,6 +167,22 @@ void Mainwin::on_view_order_click()
 //insert > customer
 void Mainwin::on_insert_customer_click()
 {
+	//call get_string to open up an entry dialog that asks for customer's name
+	std::string name = get_string("Customer name? ");
+	
+	if(name.size())
+	{
+		//get phone and email
+		std::string phone = get_string("Customer phone (xxx-xxx-xxxx)? ");
+		std::string email = get_string("Customer email (xxx@domain.com)?");
+		//instance and add the customer to Store::add_customer
+		Customer customer{name, phone, email};		
+		store->add_customer(customer);
+
+		//update status bar and call on_view_customer_click to show the new customer that is added to the data area
+		set_msg("Added customer" + name);
+		on_view_customer_click();
+	}
 }
 
 //insert > peripheral
@@ -194,21 +212,26 @@ void Mainwin::on_about_click()
 //getters
 std::string Mainwin::get_string(std::string prompt)
 {
-	return prompt;
+	EntryDialog ed{*this, prompt};
+	ed.run();
+
+	return ed.get_text();
 }
 double Mainwin::get_double(std::string prompt)
 {
-	return std::atod(prompt);
+	return std::stod(get_string(prompt));
 }
 int Mainwin::get_int(std::string prompt)
 {
-	return std::atoi(prompt);
+	return std::stoi(get_string(prompt));
 }
 
 //setters
 void Mainwin::set_data(std::string s)
 {
+	data->set_markup(s);
 }
 void Mainwin::set_msg(std::string s)
 {
+	msg->set_markup(s);
 }

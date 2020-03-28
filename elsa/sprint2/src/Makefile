@@ -15,6 +15,8 @@ customer.o: customer.cpp *.h
 	$(CXX) $(CXXFLAGS) -c customer.cpp -o customer.o
 desktop.o: desktop.cpp *.h
 	$(CXX) $(CXXFLAGS) -c desktop.cpp -o desktop.o
+entrydialog.o: entrydialog.cpp *.h
+	$(CXX) $(CXXFLAGS) -c entrydialog.cpp $(GTKFLAGS) -o entrydialog.o
 main.o: main.cpp *.h
 	$(CXX) $(CXXFLAGS) -c main.cpp $(GTKFLAGS) -o main.o
 mainwin.o: mainwin.cpp *.h
@@ -25,8 +27,6 @@ order.o: order.cpp *.h
 	$(CXX) $(CXXFLAGS) -c order.cpp -o order.o
 store.o: store.cpp *.h
 	$(CXX) $(CXXFLAGS) -c store.cpp -o store.o
-entrydialog.o: entrydialog.cpp *.h
-	$(CXX) $(CXXFLAGS) -c entrydialog.cpp -o entrydialog.o
 
 clean:
 	-rm -f *.o *.gch *~ store
