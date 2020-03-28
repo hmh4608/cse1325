@@ -28,7 +28,7 @@ std::ostream& operator<<(std::ostream& ost, const Desktop& desktop)
 	ost << "Desktop ($" << desktop.price() << std::fixed << std::setprecision(2) << ") includes\n";
 	for(auto& o : desktop.options)
 	{
-		ost << "    " << *o << "\n";
+		ost << "     " << *o << "\n";
 	}	
 	return ost;
 }

@@ -217,6 +217,25 @@ void Mainwin::on_view_desktop_click()
 //view > order
 void Mainwin::on_view_order_click()
 {
+	std::ostringstream oss;
+	
+	if(store->num_orders() <= 0)
+	{
+		oss << "<span size='14000' weight='bold'>There are currently no orders. To add a new order, click Insert > Order.</span>";
+	}
+	else
+	{
+		oss << "<span size='20000' weight='bold'>Order(s)</span>\n\n<span size='14000'>";
+		//list out all orders
+		for(int i=0; i<store->num_orders(); ++i)
+		{
+			oss << i << ") " << store->order(i) << '\n';
+		}
+		oss << "</span>";
+	}
+
+	set_data(oss.str());
+	set_msg("");
 }
 
 
@@ -295,6 +314,67 @@ void Mainwin::on_insert_desktop_click()
 //insert > order
 void Mainwin::on_insert_order_click()
 {
+	int customer = -1;
+	int order = -1;
+	int desktop = -1;
+
+	if(store->num_desktops() <= 0 || store->num_customers() <= 0)
+	{
+		set_data("<span size='14000' weight='bold'>There are currently either no customers or no products to create an order.\n\nTo add a new customer, click Insert > Customer.\nTo add a new product, click Insert > Desktop.</span>");
+		return;
+	}
+	
+	//for prompt
+	std::ostringstream oss;
+
+	for(int i=0; i<store->num_customers(); ++i)
+	{
+		oss << i << ") " << store->customer(i) << '\n';
+	}
+	oss << "\nCustomer? ";
+	customer = get_int(oss.str());
+	
+	if(customer >= 0 && customer < store->num_customers())
+	{
+		try{
+			order = store->new_order(customer);
+			desktop = 0;
+		}catch(std::exception& e){
+			std::cerr << "Unable to create order for customer " << customer << std::endl;
+		}
+
+		on_view_order_click();
+		set_msg("Added order " + std::to_string(order));
+
+		//for next prompt
+		oss.str("");	
+		oss.clear();
+		for(int i=0; i<store->num_desktops(); ++i)
+		{
+			oss << i << ") " << store->desktop(i) << "\n";
+		}
+		oss << "\nAdd which desktop to the order?";
+
+		do{
+			desktop = get_int(oss.str());
+			
+			if(desktop >= 0 && desktop < store->num_desktops())
+			{
+				try{
+					store->add_desktop(desktop, order);
+				}catch(std::exception& e){
+					std::cerr << "Unable to add desktop " << desktop << " to order " << order << std::endl;
+				}
+
+				on_view_order_click();
+				set_msg("Added desktop " + std::to_string(desktop) + " to order " + std::to_string(order));
+			}
+			else if(desktop != -1)
+			{
+				std::cerr << "Invalid desktop" << std::endl;
+			}
+		}while(desktop != -1);
+	}
 }
 
 
@@ -302,6 +382,17 @@ void Mainwin::on_insert_order_click()
 //about > help
 void Mainwin::on_about_click()
 {
+	Gtk::AboutDialog dialog;
+
+	dialog.set_transient_for(*this); //avoid the discouraging warning;
+	dialog.set_program_name("Exceptional Laptops and Supercomputers Always (ELSA)");
+	dialog.set_version("Version 1.0");
+	dialog.set_copyright("Copyright 2019-2020");
+	dialog.set_license_type(Gtk::License::LICENSE_GPL_3_0);
+	std::vector<Glib::ustring> authors = {"Hoang Ho"};
+	dialog.set_authors(authors);
+	dialog.set_comments("A management system for the ELSA store which manages customer, peripheral, product, and order information.");
+	dialog.run();
 }
 
 

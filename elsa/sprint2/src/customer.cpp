@@ -15,7 +15,7 @@ std::ostream& operator<<(std::ostream& ost, const Customer& customer)
 	if(customer._phone == "") throw std::runtime_error("Not a phone number, empty string");
 	if(customer._email == "") throw std::runtime_error("Not an email, empty string");
 
-	ost << customer._name + " " + customer._phone + " " + customer._email;
+	ost << customer._name + " / " + customer._phone + " / " + customer._email;
 
 	return ost;
 }
