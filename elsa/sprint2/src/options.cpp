@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iomanip>
 #include <string>
 #include "options.h"
 
@@ -22,6 +23,6 @@ std::string Options::to_string() const
 std::ostream& operator<<(std::ostream& ost, const Options& option)
 {
 	if(option.cost() < 0) throw std::runtime_error("Cost is negative");	
-	ost << option.to_string() + " $" << option.cost();
+	ost << option.to_string() + " ($" << std::fixed << std::setprecision(2) << option.cost() << ")";
 	return ost;
 }

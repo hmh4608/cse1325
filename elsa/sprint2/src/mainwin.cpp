@@ -193,6 +193,25 @@ void Mainwin::on_view_peripheral_click()
 //view > desktop
 void Mainwin::on_view_desktop_click()
 {
+	std::ostringstream oss;
+
+	if(store->num_desktops() <= 0)
+	{
+		oss << "<span size='14000' weight='bold'>There are currently no products. To add a new product, click Insert > Desktop.</span>";
+	}
+	else
+	{
+		oss << "<span size='20000' weight='bold'>Products</span>\n\n<span size='14000'>";
+		//list all desktops
+		for(int i=0; i<store->num_desktops(); ++i)
+		{
+			oss << i << ") " << store->desktop(i) << "\n";
+		}
+		oss << "</span>";
+	}
+
+	set_data(oss.str());
+	set_msg("");
 }
 
 //view > order
@@ -206,7 +225,7 @@ void Mainwin::on_view_order_click()
 void Mainwin::on_insert_customer_click()
 {
 	//call get_string to open up an entry dialog that asks for customer's name
-	std::string name = get_string("Customer name? ");
+	std::string name = get_string("Customer name?");
 	
 	if(name.size())
 	{
@@ -227,14 +246,14 @@ void Mainwin::on_insert_customer_click()
 void Mainwin::on_insert_peripheral_click()
 {
 	//prompts	
-	std::string s = get_string("Name of the new peripheral? ");
-	double cost = get_double("Cost? ");
+	std::string s = get_string("Name of the new peripheral?");
+	double cost = get_double("Cost?");
 	try{
 		//add new peripheral to the list that's in store		
 		Options option{s, cost};
 		store->add_option(option);
 		on_view_peripheral_click();
-		set_msg("Added peripheral " + std::to_string(store->num_options()-1));
+		set_msg("Added peripheral " + std::to_string((store->num_options())-1));
 	}catch(std::exception& e){
 		std::cerr << "Invalid peripheral: " << e.what() << std::endl;
 	}
@@ -243,6 +262,34 @@ void Mainwin::on_insert_peripheral_click()
 //insert > desktop
 void Mainwin::on_insert_desktop_click()
 {
+	//let's create a new product
+	int desktop = store->new_desktop();
+	on_view_desktop_click();
+	set_msg("Added desktop " + std::to_string(desktop));
+	
+	//for the prompt	
+	std::ostringstream oss;
+	for(int i=0; i<store->num_options(); ++i)
+	{
+		oss << i << ") " << store->option(i) << '\n';
+	}
+	oss << "\nAdd which peripheral?";
+
+	int option;	
+	do{
+		option = get_int(oss.str());
+
+		if(option >= 0 && option < store->num_options())
+		{
+			store->add_option(option,desktop);
+			on_view_desktop_click();
+			set_msg("Added peripheral " + std::to_string(option) + " to desktop " + std::to_string(desktop));
+		}
+		else if(option != -1)
+		{
+			std::cerr << "Invalid option" << std::endl;
+		}
+	}while(option != -1);
 }
 
 //insert > order
@@ -275,9 +322,8 @@ double Mainwin::get_double(std::string prompt)
 		num = std::stod(get_string(prompt));
 		return num;
 	}catch(std::exception& e){
-		std::cerr << "Invalid entry" << e.what() << std::endl;	
+		return -1.0;
 	}
-	return -1.0;
 }
 int Mainwin::get_int(std::string prompt)
 {
@@ -286,9 +332,8 @@ int Mainwin::get_int(std::string prompt)
 		num = std::stoi(get_string(prompt));
 		return num;
 	}catch(std::exception& e){
-		std::cerr << "Invalid entry" << e.what() << std::endl;	
+		return -1;
 	}
-	return -1;
 }
 
 //setters
