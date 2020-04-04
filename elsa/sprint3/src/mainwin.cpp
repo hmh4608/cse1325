@@ -2,6 +2,7 @@
 #include "entrydialog.h"
 #include <iostream> //for std::cerr logging
 #include <sstream>
+#include <fstream>
 
 Mainwin::Mainwin() : store{new Store()}, filename{"untitled.elsa"} { 
 
@@ -41,7 +42,7 @@ Mainwin::Mainwin() : store{new Store()}, filename{"untitled.elsa"} {
 
 	//open - append to file menu
 	Gtk::MenuItem *menuitem_open = Gtk::manage(new Gtk::MenuItem("_Open", true));
-	menuitem_open->signal_acivate().connect([this] {this->on_open_click();});
+	menuitem_open->signal_activate().connect([this] {this->on_open_click();});
 	filemenu->append(*menuitem_open);
 
 	//quit - append to file menu
@@ -153,14 +154,83 @@ Mainwin::~Mainwin() {}
 //file > save
 void Mainwin::on_save_click()
 {
+	try{
+		std::ofstream ofs{filename}; //open an output stream
+		store->save(ofs);
+		set_msg("Saved to " + filename);
+		if(!ofs) throw std::runtime_error{"Error writing file"};
+	}catch(std::exception& e){
+		Gtk::MessageDialog{*this, "Unable to save ELSA"}.run();	
+	}
 }
 //file > save as
 void Mainwin::on_save_as_click()
 {
+	Gtk::FileChooserDialog dialog("Please choose a file", Gtk::FileChooserAction::FILE_CHOOSER_ACTION_SAVE);
+	dialog.set_transient_for(*this);
+
+	//create a filter for .elsa files
+	auto filter_elsa = Gtk::FileFilter::create();
+	filter_elsa->set_name("ELSA files");
+	filter_elsa->add_pattern("*.elsa");
+	dialog.add_filter(filter_elsa); //add to filter list
+
+	//create a filter for any file
+	auto filter_any = Gtk::FileFilter::create();
+	filter_any->set_name("Any files");
+	filter_any->add_pattern("*");
+	dialog.add_filter(filter_any);
+
+	//set default shown filename on the dialog to untitled.elsa
+	dialog.set_filename("untitled.elsa");
+	
+	//add response buttons to the dialog
+	dialog.add_button("_Cancel", Gtk::RESPONSE_CANCEL);
+	dialog.add_button("_Save", Gtk::RESPONSE_OK);
+
+	if(dialog.run() == Gtk::RESPONSE_OK)
+	{
+		filename = dialog.get_filename(); //assign user provided filename as most recently saved file		
+		on_save_click();
+	}
 }
 //file > open
 void Mainwin::on_open_click()
 {
+	Gtk::FileChooserDialog dialog("Please choose a file", Gtk::FileChooserAction::FILE_CHOOSER_ACTION_OPEN);
+	dialog.set_transient_for(*this);
+	
+	//create a filter for .elsa files
+	auto filter_elsa = Gtk::FileFilter::create();
+	filter_elsa->set_name("ELSA files");
+	filter_elsa->add_pattern("*.elsa");
+	dialog.add_filter(filter_elsa);
+
+	//creater a filter for any files
+	auto filter_any = Gtk::FileFilter::create();
+	filter_any->set_name("Any files");
+	filter_any->add_pattern("*");
+	dialog.add_filter(filter_any);
+
+	//add response buttons
+	dialog.add_button("_Cancel", Gtk::RESPONSE_CANCEL);
+	dialog.add_button("_Open", Gtk::RESPONSE_OK);
+
+	if(dialog.run() == Gtk::RESPONSE_OK)
+	{
+		try{
+			delete store; //delete old store
+			filename = dialog.get_filename(); //assign user provided filename as most recently opened filename
+			std::ifstream ifs{filename}; //open input stream with filename
+			store = new Store{ifs}; //construct a new store			
+			on_view_desktop_click(); //update display			
+			set_msg("Opened " + filename);
+		}catch(std::exception& e){
+			Gtk::MessageDialog{*this, "Unable to open data for ELSA store"}.run();
+		}
+	}
+	
+
 }
 //file > quit
 void Mainwin::on_quit_click()

@@ -26,7 +26,7 @@ options.o: options.cpp *.h
 order.o: order.cpp *.h
 	$(CXX) $(CXXFLAGS) -c order.cpp -o order.o
 store.o: store.cpp *.h
-	$(CXX) $(CXXFLAGS) -c store.cpp -o store.o
+	$(CXX) $(CXXFLAGS) -c store.cpp $(GTKFLAGS) -o store.o
 
 clean:
 	-rm -f *.o *.gch *~ store

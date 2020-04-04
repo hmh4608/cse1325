@@ -9,7 +9,7 @@ class Options
 	public:
 	//constructors and destructor
 	Options(std::string name, double cost);
-	Options(std::isteram& ist);
+	Options(std::istream& ist);
 	~Options();
 
 	double cost() const;

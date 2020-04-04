@@ -7,9 +7,18 @@
 
 //constructor and destructor
 Options::Options(std::string name, double cost) : _name{name}, _cost{cost} {}
+Options::Options(std::istream& ist)
+{
+	ist >> _name >> _cost;
+}
 Options::~Options() {}
 
 //methods
+void Options::save(std::ostream& ost)
+{
+	ost << _name << std::endl;
+	ost << _cost << std::endl;
+}
 double Options::cost() const
 {
 	return _cost;

@@ -14,7 +14,7 @@ class Store
 	public:
 	//constructors
 	Store();
-	Store(std:istream& ist); //handles loading file
+	Store(std::istream& ist); //handles loading file
 
 	void save(std::ostream& ost);
 	void add_customer(Customer& customer);

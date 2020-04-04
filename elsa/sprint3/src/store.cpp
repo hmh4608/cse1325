@@ -4,6 +4,88 @@
 #include "store.h"
 
 //implementation of Store
+
+//constructors
+Store::Store() {}
+Store::Store(std::istream& ist)
+{
+	//loading in customers	
+	//stream number of customers
+	int numCust = 0;
+	ist >> numCust;
+	ist.ignore(32767, '\n'); //ignore any text left in the input to leave stream poitner at start of next line
+
+	//iterate over all customers and restore customer data using ist as parameter
+	for(int i=0; i<numCust; ++i)
+	{		
+		customers.push_back(Customer{ist});
+	}
+
+	//loading options
+	int numOpt = 0;
+	ist >> numOpt;
+	ist.ignore(32767, '\n');
+	for(int i=0; i<numOpt; ++i)
+	{
+		options.push_back(new Options{ist});
+	}
+
+	//loading desktops
+	int numDesk = 0;
+	ist >> numDesk;
+	ist.ignore(32767, '\n');
+	for(int i=0 ;i<numDesk; ++i)
+	{
+		desktops.push_back(Desktop{ist});
+	}
+	//loading orders
+	int numOrd = 0;
+	ist >> numOrd;
+	ist.ignore(32767, '\n');
+	for(int i=0; i<numOrd; ++i)
+	{
+		orders.push_back(Order{ist});
+	}
+}
+
+//save
+void Store::save(std::ostream& ost)
+{
+	//saving customers		
+	//stream out number of customers
+	ost << customers.size() << std::endl;
+	//iterate over all customers and save each customer's data
+	for(auto& c : customers)
+	{
+		c.save(ost);
+	}
+	if(!ost) throw std::runtime_error{"Error writing customers to file"};
+
+	//saving options
+	ost << options.size() << std::endl;
+	for(auto& o : options)
+	{
+		o->save(ost);
+	}
+	if(!ost) throw std::runtime_error{"Error writing options to file"};
+
+	//saving desktops
+	ost << desktops.size() << std::endl;
+	for(auto& d : desktops)
+	{
+		d.save(ost);
+	}		
+	if(!ost) throw std::runtime_error{"Error writing desktops to file"};
+
+	//saving orders
+	ost << orders.size() << std::endl;
+	for(auto& o : orders)
+	{
+		o.save(ost);
+	}
+	if(!ost) throw std::runtime_error{"Error writing orders to file"};
+}
+
 //customer
 //push customer to customers vector
 void Store::add_customer(Customer& customer)
