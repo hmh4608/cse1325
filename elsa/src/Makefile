@@ -8,8 +8,8 @@ debug: store
 
 rebuild: clean store
 
-store: mainwin.o customer.o desktop.o main.o options.o order.o store.o entrydialog.o *.h
-	$(CXX) $(CXXFLAGS) mainwin.o customer.o desktop.o main.o store.o options.o order.o entrydialog.o $(GTKFLAGS) -o store
+store: mainwin.o customer.o desktop.o main.o options.o order.o store.o entrydialog.o ram.o *.h
+	$(CXX) $(CXXFLAGS) mainwin.o customer.o desktop.o main.o store.o options.o order.o entrydialog.o ram.o $(GTKFLAGS) -o store
 
 customer.o: customer.cpp *.h
 	$(CXX) $(CXXFLAGS) -c customer.cpp -o customer.o
@@ -27,6 +27,8 @@ order.o: order.cpp *.h
 	$(CXX) $(CXXFLAGS) -c order.cpp -o order.o
 store.o: store.cpp *.h
 	$(CXX) $(CXXFLAGS) -c store.cpp $(GTKFLAGS) -o store.o
+ram.o: ram.cpp *.h
+	$(CXX) $(CXXFLAGS) -c ram.cpp -o ram.o
 
 clean:
 	-rm -f *.o *.gch *~ store

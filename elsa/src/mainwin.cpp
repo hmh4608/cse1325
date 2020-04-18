@@ -2,8 +2,9 @@
 #include "entrydialog.h"
 #include <iostream> //for std::cerr logging
 #include <sstream>
+#include <fstream>
 
-Mainwin::Mainwin() : store{new Store()} { 
+Mainwin::Mainwin() : store{new Store()}, filename{"untitled.elsa"} { 
 
 	//GUI SETUP//
 
@@ -28,6 +29,21 @@ Mainwin::Mainwin() : store{new Store()} {
 	//create menu drop down within menu item
 	Gtk::Menu *filemenu = Gtk::manage(new Gtk::Menu());
 	menuitem_file->set_submenu(*filemenu);
+
+	//save - append to file menu
+	Gtk::MenuItem *menuitem_save = Gtk::manage(new Gtk::MenuItem("_Save", true));
+	menuitem_save->signal_activate().connect([this] {this->on_save_click();});
+	filemenu->append(*menuitem_save);
+
+	//save as - append to file menu
+	Gtk::MenuItem *menuitem_saveas = Gtk::manage(new Gtk::MenuItem("_Save As", true));
+	menuitem_saveas->signal_activate().connect([this] {this->on_save_as_click();});
+	filemenu->append(*menuitem_saveas);
+
+	//open - append to file menu
+	Gtk::MenuItem *menuitem_open = Gtk::manage(new Gtk::MenuItem("_Open", true));
+	menuitem_open->signal_activate().connect([this] {this->on_open_click();});
+	filemenu->append(*menuitem_open);
 
 	//quit - append to file menu
 	Gtk::MenuItem *menuitem_quit = Gtk::manage(new Gtk::MenuItem("_Quit", true));
@@ -134,7 +150,89 @@ Mainwin::~Mainwin() {}
 
 //methods
 
-//FILE > QUIT//
+//FILE//
+//file > save
+void Mainwin::on_save_click()
+{
+	try{
+		std::ofstream ofs{filename}; //open an output stream
+		store->save(ofs);
+		set_msg("Saved to " + filename);
+		if(!ofs) throw std::runtime_error{"Error writing file"};
+	}catch(std::exception& e){
+		Gtk::MessageDialog{*this, "Unable to save ELSA"}.run();	
+	}
+}
+//file > save as
+void Mainwin::on_save_as_click()
+{
+	Gtk::FileChooserDialog dialog("Please choose a file", Gtk::FileChooserAction::FILE_CHOOSER_ACTION_SAVE);
+	dialog.set_transient_for(*this);
+
+	//create a filter for .elsa files
+	auto filter_elsa = Gtk::FileFilter::create();
+	filter_elsa->set_name("ELSA files");
+	filter_elsa->add_pattern("*.elsa");
+	dialog.add_filter(filter_elsa); //add to filter list
+
+	//create a filter for any file
+	auto filter_any = Gtk::FileFilter::create();
+	filter_any->set_name("Any files");
+	filter_any->add_pattern("*");
+	dialog.add_filter(filter_any);
+
+	//set default shown filename on the dialog to untitled.elsa
+	dialog.set_filename("untitled.elsa");
+	
+	//add response buttons to the dialog
+	dialog.add_button("_Cancel", Gtk::RESPONSE_CANCEL);
+	dialog.add_button("_Save", Gtk::RESPONSE_OK);
+
+	if(dialog.run() == Gtk::RESPONSE_OK)
+	{
+		filename = dialog.get_filename(); //assign user provided filename as most recently saved file		
+		on_save_click();
+	}
+}
+//file > open
+void Mainwin::on_open_click()
+{
+	Gtk::FileChooserDialog dialog("Please choose a file", Gtk::FileChooserAction::FILE_CHOOSER_ACTION_OPEN);
+	dialog.set_transient_for(*this);
+	
+	//create a filter for .elsa files
+	auto filter_elsa = Gtk::FileFilter::create();
+	filter_elsa->set_name("ELSA files");
+	filter_elsa->add_pattern("*.elsa");
+	dialog.add_filter(filter_elsa);
+
+	//creater a filter for any files
+	auto filter_any = Gtk::FileFilter::create();
+	filter_any->set_name("Any files");
+	filter_any->add_pattern("*");
+	dialog.add_filter(filter_any);
+
+	//add response buttons
+	dialog.add_button("_Cancel", Gtk::RESPONSE_CANCEL);
+	dialog.add_button("_Open", Gtk::RESPONSE_OK);
+
+	if(dialog.run() == Gtk::RESPONSE_OK)
+	{
+		try{
+			delete store; //delete old store
+			filename = dialog.get_filename(); //assign user provided filename as most recently opened filename
+			std::ifstream ifs{filename}; //open input stream with filename
+			store = new Store{ifs}; //construct a new store			
+			on_view_desktop_click(); //update display			
+			set_msg("Opened " + filename);
+		}catch(std::exception& e){
+			Gtk::MessageDialog{*this, "Unable to open data for ELSA store"}.run();
+		}
+	}
+	
+
+}
+//file > quit
 void Mainwin::on_quit_click()
 {
 	close();
@@ -243,14 +341,57 @@ void Mainwin::on_view_order_click()
 //insert > customer
 void Mainwin::on_insert_customer_click()
 {
-	//call get_string to open up an entry dialog that asks for customer's name
-	std::string name = get_string("Customer name?");
+	//for creating custom dialog w/ grid idk this is so many lines i cant see im tired
+	Gtk::Dialog dialog{"Insert Customer", *this};
 	
-	if(name.size())
+	//grid for placing widgets and jazz into the dialog, upper left at (0,0)
+	Gtk::Grid grid;
+
+	//respective name, phone, email labels
+	Gtk::Label c_name{"Name"};
+	Gtk::Label c_phone{"Phone"};
+	Gtk::Label c_email{"Email"};
+
+	//name, phone, email entry dialogs to put into the grid
+	Gtk::Entry e_name{};
+	Gtk::Entry e_phone{};
+	Gtk::Entry e_email{};
+
+	//data validation
+	e_name.set_placeholder_text("*required*");
+	e_phone.set_placeholder_text("xxx-xxx-xxxx");
+	e_email.set_placeholder_text("xxx@domain.com");
+	
+	//add these bad boys to the grid lol
+	grid.attach(c_name, 0,0,1,1); //attached at (0,0) single width and single height
+	grid.attach(e_name, 1,0,2,1);
+	grid.attach(c_phone, 0,1,1,1);
+	grid.attach(e_phone, 1,1,2,1);
+	grid.attach(c_email, 0,2,1,1);
+	grid.attach(e_email, 1,2,2,1);
+
+	//okkkkkkkk let's add teh grid to the dialog's VBox aka content area
+	dialog.get_content_area()->add(grid);
+	//add the buttons so we can escape properly
+	dialog.add_button("Insert", Gtk::RESPONSE_OK);
+	dialog.add_button("Cancel", Gtk::RESPONSE_CANCEL);	
+
+	//finally, show everything
+	dialog.show_all();
+	
+	while(dialog.run() == Gtk::RESPONSE_OK)
 	{
-		//get phone and email
-		std::string phone = get_string("Customer phone (xxx-xxx-xxxx)? ");
-		std::string email = get_string("Customer email (xxx@domain.com)?");
+		//data validation
+		if(!(e_name.get_text().size()))
+		{
+			Gtk::MessageDialog{*this, "Please enter a customer name"}.run();
+			continue; //onto next iteration
+		}
+		
+		//get the entries
+		std::string name = e_name.get_text();
+		std::string phone = e_phone.get_text();
+		std::string email = e_email.get_text();
 		//instance and add the customer to Store::add_customer
 		Customer customer{name, phone, email};		
 		store->add_customer(customer);
@@ -258,23 +399,96 @@ void Mainwin::on_insert_customer_click()
 		//call on_view_customer_click to show the new customer that is added to the data area and update status bar
 		on_view_customer_click();
 		set_msg("Added customer " + name);
+		break;
 	}
 }
 
 //insert > peripheral
 void Mainwin::on_insert_peripheral_click()
 {
-	//prompts	
-	std::string s = get_string("Name of the new peripheral?");
-	double cost = get_double("Cost?");
-	try{
-		//add new peripheral to the list that's in store		
-		Options option{s, cost};
-		store->add_option(option);
+	//ok last thing to do
+	//create dialog for customization
+	Gtk::Dialog dialog{"Insert Peripheral", *this};
+	
+	//lets put everything in here
+	Gtk::Grid grid;
+
+	Gtk::Label radio_select{"Select a peripheral type:"};
+	Gtk::Label name{"Peripheral Name"};
+	Gtk::Label cost{"Cost"};
+	Gtk::Label size{"RAM Size"};
+
+	Gtk::Entry e_name{};
+	Gtk::Entry e_cost{};
+	Gtk::Entry e_size{};
+	
+	e_name.set_placeholder_text("*required*");
+	e_cost.set_placeholder_text("*required*");
+	e_size.set_placeholder_text("*required for RAM*");
+
+	//lets make a radio button group bc i wanna practice it
+	Gtk::RadioButton ram_radio{"RAM"};
+	Gtk::RadioButton other_radio{"Other"};
+
+	grid.attach(radio_select, 0,0,1,1);
+	grid.attach(ram_radio, 0,1,2,1);
+	grid.attach(other_radio, 0,2,2,1);
+
+	ram_radio.join_group(other_radio);
+
+	grid.attach(name, 0,4,1,1);
+	grid.attach(e_name, 1,4,2,1);
+	grid.attach(cost, 0,5,1,1);
+	grid.attach(e_cost, 1,5,2,1);
+	grid.attach(size, 0,6,1,1);
+	grid.attach(e_size, 1,6,2,1);
+
+	dialog.get_content_area()->add(grid);
+
+	dialog.add_button("Insert", Gtk::RESPONSE_OK);
+	dialog.add_button("Cancel", Gtk::RESPONSE_CANCEL);
+
+	//show everything
+	dialog.show_all();
+
+	//for noting which one is toggled
+	int selected_radio;
+
+	while(dialog.run() == Gtk::RESPONSE_OK)
+	{
+		//see which one is toggled when the user presses insert		
+		if(ram_radio.get_active())
+			selected_radio = 1;
+		else
+			selected_radio = 2; //other peripheral type will be set by default if they dont selected anything
+		
+		//data validation
+		if(!(e_name.get_text().size()) || !(e_cost.get_text().size()) || (!(e_size.get_text().size()) && selected_radio == 1))
+		{
+			Gtk::MessageDialog{*this, "Please fill in the required fields"}.run();
+			continue;
+		}
+
+		//get the entries
+		std::string name = e_name.get_text();
+		double cost = std::stod(e_cost.get_text());
+
+		//add new peripheral to list in store depending on type
+		if(selected_radio == 1)
+		{
+			int size = std::stoi(e_size.get_text());
+			Ram ram{name, cost, size};
+			store->add_option(ram);
+		}
+		else
+		{
+			Options option{name, cost};
+			store->add_option(option);
+		}
+		
 		on_view_peripheral_click();
 		set_msg("Added peripheral " + std::to_string((store->num_options())-1));
-	}catch(std::exception& e){
-		std::cerr << "Invalid peripheral: " << e.what() << std::endl;
+		break;
 	}
 }
 

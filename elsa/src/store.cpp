@@ -9,6 +9,17 @@
 Store::Store() {}
 Store::Store(std::istream& ist)
 {
+	//input buffer
+	std::string s;
+
+	//checking correct elsa file and version
+	std::getline(ist, s);
+	if(s != ELSA_COOKIE)
+		throw std::runtime_error{"Not an ELSA file"};
+	std::getline(ist, s);
+	if(s != ELSA_FILE_VERSION)
+		throw std::runtime_error{"Unsupported ELSA file version"};
+
 	//loading in customers	
 	//stream number of customers
 	int numCust = 0;
@@ -27,7 +38,17 @@ Store::Store(std::istream& ist)
 	ist.ignore(32767, '\n');
 	for(int i=0; i<numOpt; ++i)
 	{
-		options.push_back(new Options{ist});
+		//check what kind of option it is
+		std::getline(ist, s);
+		if(s == "ram")
+		{
+			std::getline(ist, s); //since every option is marked with other whether it's ram or not			
+			options.push_back(new Ram{ist});
+		}	
+		else
+		{
+			options.push_back(new Options{ist});
+		}
 	}
 
 	//loading desktops
@@ -51,6 +72,9 @@ Store::Store(std::istream& ist)
 //save
 void Store::save(std::ostream& ost)
 {
+	ost << ELSA_COOKIE << "\n";
+	ost << ELSA_FILE_VERSION << "\n";
+	
 	//saving customers		
 	//stream out number of customers
 	ost << customers.size() << std::endl;

@@ -6,8 +6,12 @@
 #include <vector>
 #include "order.h"
 #include "options.h"
+#include "ram.h"
 #include "desktop.h"
 #include "customer.h"
+
+const std::string ELSA_COOKIE = "!ELSA!";
+const std::string ELSA_FILE_VERSION = "1.2-ram";
 
 class Store
 {
