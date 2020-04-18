@@ -1,7 +1,9 @@
 #include <iostream>
 #include <iomanip>
+#include <sstream>
 #include <string>
 #include "options.h"
+#include "ram.h"
 
 //implementation of Options
 
@@ -27,12 +29,14 @@ double Options::cost() const
 
 std::string Options::to_string() const
 {
-	return _name;
+	std::ostringstream oss;
+	oss << _name + " ($" << std::fixed << std::setprecision(2) << cost() << ")";
+	return oss.str();
 }
 
 std::ostream& operator<<(std::ostream& ost, const Options& option)
 {
 	if(option.cost() < 0) throw std::runtime_error("Cost is negative");	
-	ost << option.to_string() + " ($" << std::fixed << std::setprecision(2) << option.cost() << ")";
+	ost << option.to_string();
 	return ost;
 }
