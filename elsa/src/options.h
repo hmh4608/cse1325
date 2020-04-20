@@ -15,6 +15,7 @@ class Options
 	double cost() const;
 	virtual void save(std::ostream& ost);
 	virtual std::string to_string() const;
+	virtual Options* clone();
 	friend std::ostream& operator<<(std::ostream& ost, const Options& option);
 
 	protected:

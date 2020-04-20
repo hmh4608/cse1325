@@ -12,6 +12,7 @@ class Ram : public Options
 
 	std::string to_string() const override;
 	void save(std::ostream& ost) override;
+	Ram* clone() override;
 
 	protected:
 	int _gb;
