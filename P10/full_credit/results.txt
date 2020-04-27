@@ -1,0 +1,69 @@
+QUESTION 1: Which value of slices did you select for your machine to solve the polynomial with 1 thread with at least a 30 second runtime:
+
+120000000 slices
+
+
+QUESTION 2: Provide the output of ``time polyb nn`` (or the improved version in the lecture video, if you prefer) for the following values of nn threads shown below:
+
+Example Timing:
+
+real	0m22.551s
+user	0m22.524s
+sys	0m0.012s
+
+
+YOUR Timing:
+
+Without threads:
+real	0m37.558s
+user	0m37.496s
+sys	0m0.012s
+
+
+With 2 threads:
+real	0m21.486s
+user	0m41.907s
+sys	0m0.028s
+
+
+With 4 threads:
+real	0m20.993s
+user	0m41.812s
+sys	0m0.036s
+
+
+With 6 threads:
+real	0m22.899s
+user	0m44.569s
+sys	0m0.148s
+
+
+With 8 threads:
+real	0m21.464s
+user	0m42.685s
+sys	0m0.064s
+
+
+With 12 threads:
+real	0m22.003s
+user	0m42.981s
+sys	0m0.154s
+
+
+With 24 threads:
+real	0m20.645s
+user	0m41.182s
+sys	0m0.017s
+
+
+QUESTION 3: Does adding more threads continue to speed up the program? Do more threads ever slow down the program slightly?  Why or why not?
+
+Adding more threads speeds up the program, but adding more past a certain number of threads appears to slow down the program slightly. This is probably due to the amount of cores the host computer has. In this case, shown from the command lscpu the host computer has 1 socket, 2 cores per socket, and 1 thread per core. In addition, hyperthreading is supported and the number of CPU(s) is listed as 2, which means it can run 4 threads at the same time, any more would mean each process has to interleave or wait for another.
+
+
+QUESTION 4: Does adding more threads increase the "system load", or is it constant regardless of the number of threads?  Why?
+
+It appears to stay relatively constant with fluctuating time spend in system overhead regardless of the number of threads. Probably because each thread will try to spend the same amount of time trying to do its tasks.
+
+
+
