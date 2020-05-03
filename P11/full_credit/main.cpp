@@ -7,7 +7,7 @@ int main() {
     Cart cart{"Rice"};
 
     //read in new items from std::cin using item's operator>> until end of 
-    std::cout << "Enter product names and price (e.g., \"English peas 0.79\")";
+    std::cout << "Enter product names and price (e.g., \"English peas 0.79\"), press return again when done: " << std::endl;
     
     Item item{"", 0};
     

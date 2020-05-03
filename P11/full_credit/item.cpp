@@ -17,18 +17,18 @@ std::istream& operator>>(std::istream& ist, Item& item)
 {
     std::string line;
     std::getline(ist, line);
-    
+
     //find the last white-space separated word
-    auto pos = line.find_last_of("\\s");
+    auto pos = line.find_last_of(" ");
     //split into name and price
     item._name = std::string{line, 0, pos};
     
-    std::string word = std::string{line, pos};
+    std::string word = std::string{line, pos+1};
     
     try{
         item._price = std::stod(word);
     }catch(std::exception& e){
-        std::cerr << "Invalid price:  '" + word + "' ==> " << item._price;
+        std::cerr << "Invalid price:  '" + item._name + "' ==> " << word;
     }
     
     return ist;
