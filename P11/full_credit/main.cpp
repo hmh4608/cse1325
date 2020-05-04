@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iomanip>
 #include <vector>
 #include <string>
 #include "cart.h"
@@ -21,14 +22,14 @@ int main() {
     }
     
     //output
-    std::cout << "Register Receipt\n" << std::endl; 
+    std::cout << "\nRegister Receipt\n" << std::endl; 
     //using iteration capability
     for(iterator i = cart.begin(); i!=cart.end(); ++i)
     {
-        std::cout << *i << std::endl;
+        std::cout << **i << std::endl;
     }
     std::cout << std::string(20, '-') << std::endl;
-    std::cout << "$\t" + std::to_string(cart.cost()) + " Total Cost" << std::endl;
+    std::cout << std::setprecision(2) << std::fixed << "$\t" << cart.cost() << " Total Cost" << std::endl;
     
     return 0;
 }

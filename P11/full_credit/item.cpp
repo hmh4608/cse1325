@@ -10,11 +10,12 @@ double Item::cost() const { return _price; }
 //streaming out/in
 std::ostream& operator<<(std::ostream& ost, const Item& item)
 {
-    ost << std::setprecision(2) << std::fixed << "$\t" << item.cost() << " " + item._name << std::endl;
+    ost << std::setprecision(2) << std::fixed << "$\t" << item.cost() << " " + item._name;
     return ost;
 }
 std::istream& operator>>(std::istream& ist, Item& item)
 {
+
     std::string line;
     std::getline(ist, line);
 
@@ -28,7 +29,7 @@ std::istream& operator>>(std::istream& ist, Item& item)
     try{
         item._price = std::stod(word);
     }catch(std::exception& e){
-        std::cerr << "Invalid price:  '" + item._name + "' ==> " << word;
+        std::cerr << "Invalid price:  '" + item._name + "' ==> " + word << std::endl;
     }
     
     return ist;
